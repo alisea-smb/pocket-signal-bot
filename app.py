@@ -1,13 +1,13 @@
 from flask import Flask, request
 import requests
+import os
 from datetime import datetime
 
 app = Flask(__name__)
 
-# --- إعداداتك الشخصية ---
-TOKEN = "8443573583:AAGqriQ2lUMROzoKJbkrs-HrontfpBS65Wk"
-CHAT_ID = "-1001963884757"
-# --------------------------
+# --- إعداداتك ---
+TOKEN = os.getenv("TELEGRAM_TOKEN")  # من Environment Variables
+CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 @app.route('/webhook-pocket', methods=['POST'])
 def webhook():
@@ -49,22 +49,4 @@ def webhook():
         else:
             return "Ignored", 200
 
-        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-        response = requests.post(url, json={
-            "chat_id": CHAT_ID,
-            "text": text,
-            "parse_mode": "Markdown"
-        })
-
-        return "OK", 200
-
-    except Exception as e:
-        print("Error:", e)
-        return "Error", 400
-
-@app.route('/')
-def home():
-    return "🎯 إشارات Pocket Option تعمل الآن! Bot is Live! 🚀"
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+        url = f"https://api.telegram.org
